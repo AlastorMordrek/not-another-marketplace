@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class NotAnotherMarketplaceApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(NotAnotherMarketplaceApplication.class, args);
-	}
-
+  public static void main (String[] args) {
+    SpringApplication.run(
+        NotAnotherMarketplaceApplication.class, args);
+  }
 }

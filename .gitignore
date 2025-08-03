@@ -18,6 +18,9 @@ HELP.md
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### NetBeans ###
+.idea
+
 #-------------------------------------------------------------------------------
 # Created by https://www.toptal.com/developers/gitignore/api/maven,java,intellij+all,visualstudio,visualstudiocode,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=maven,java,intellij+all,visualstudio,visualstudiocode,react
