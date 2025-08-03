@@ -13,6 +13,7 @@ This repository is part of my professional portfolio and is intended for evaluat
 If you'd like to use this code for any purpose, please contact me at:
 
 Email: [el.silas@pm.me]
+
 Linkedin: [https://www.linkedin.com/in/silas-mordrek/]
 
 ---
@@ -25,4 +26,5 @@ Este repositorio es parte de mi portafolio profesional y está destinado únicam
 Si deseas utilizar este código para cualquier propósito, por favor contáctame en:
 
 Email: [el.silas@pm.me]
+
 Linkedin: [https://www.linkedin.com/in/silas-mordrek/]
