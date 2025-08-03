@@ -1,6 +1,7 @@
 # not-another-marketplace
 
 A complete marketplace web app, developed with the Java Springboot tech stack.
+
 Una aplicacion web de comercio completa, desarrollada con la tecnologia de Java Springboot.
 
 ## LICENSE
