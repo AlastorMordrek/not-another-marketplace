@@ -1,3 +1,24 @@
+HELP.md
+
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.factorypath
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+#-------------------------------------------------------------------------------
 # Created by https://www.toptal.com/developers/gitignore/api/maven,java,intellij+all,visualstudio,visualstudiocode,react
 # Edit at https://www.toptal.com/developers/gitignore?templates=maven,java,intellij+all,visualstudio,visualstudiocode,react
 
