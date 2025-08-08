@@ -43,7 +43,7 @@ public class StudentIntegrationTest {
   void shouldPersistAndRetrieveStudents () {
     // Given
     Student student = new Student(
-      "Integration", "integration@test.com", LocalDate.now());
+      "Integration", "integration@test.com", LocalDate.now(), "pwd", "STUDENT");
 
     // When
     Student addedStudent = controller.add(student);

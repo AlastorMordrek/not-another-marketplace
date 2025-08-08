@@ -1,5 +1,6 @@
 package com.silas_mordrek.not_another_marketplace.student;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,7 +8,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/v1/student")
-
 public class StudentController {
 
   private final StudentService studentService;
@@ -19,8 +19,13 @@ public class StudentController {
   }
 
 
+  @PostMapping("/login")
+  public String login (@RequestBody Student student) {
+    return studentService.verify(student);
+  }
+
   @GetMapping
-  public List<Student> getAll () {
+  public List<Student> getAll (HttpServletRequest req) {
     return studentService.getAll();
   }
 

@@ -30,7 +30,8 @@ class StudentServiceTest {
   void add () {
     // Given
     Student student = new Student(
-      "Test", "test@example.com", LocalDate.now());
+      "Test", "test@example.com", LocalDate.now(),
+      "pwd", "STUDENT");
 
     when(studentRepository.findByEmail(anyString()))
       .thenReturn(Optional.empty());
@@ -50,7 +51,8 @@ class StudentServiceTest {
   void addShouldThrowWhenEmailExists () {
     // Given
     Student existing = new Student(
-      "Existing", "exists@example.com", LocalDate.now());
+      "Existing", "exists@example.com", LocalDate.now(),
+      "pwd", "STUDENT");
 
     when(studentRepository.findByEmail("exists@example.com"))
       .thenReturn(Optional.of(existing));
@@ -58,7 +60,8 @@ class StudentServiceTest {
     // When/Then
     assertThatThrownBy(() ->
       studentService.add(
-        new Student("New", "exists@example.com", LocalDate.now())
+        new Student("New", "exists@example.com", LocalDate.now(),
+          "pwd", "STUDENT")
       ))
       .isInstanceOf(IllegalStateException.class)
       .hasMessageContaining("Email already taken.");
@@ -68,9 +71,11 @@ class StudentServiceTest {
   void getAllShouldReturnAllStudents () {
     // Given
     Student s1 = new Student(
-      "A", "a@test.com", LocalDate.now());
+      "A", "a@test.com", LocalDate.now(),
+      "pwd", "STUDENT");
     Student s2 = new Student(
-      "B", "b@test.com", LocalDate.now());
+      "B", "b@test.com", LocalDate.now(),
+      "pwd", "STUDENT");
 
     when(studentRepository.findAll()).thenReturn(List.of(s1, s2));
 
@@ -85,7 +90,8 @@ class StudentServiceTest {
   void deleteShouldRemoveStudent () {
     // Given
     Student student = new Student(
-      1L, "Test", "test@test.com", LocalDate.now());
+      1L, "Test", "test@test.com", LocalDate.now(),
+      "pwd", "STUDENT");
 
     when(studentRepository.findById(1L))
       .thenReturn(Optional.of(student));

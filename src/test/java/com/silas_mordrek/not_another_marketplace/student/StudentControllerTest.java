@@ -26,7 +26,7 @@ class StudentControllerTest {
   void getAllSholdReturnStudents () throws Exception {
     // Given
     Student student = new Student(
-      1L, "Test", "test@example.com", LocalDate.now());
+      1L, "Test", "test@example.com", LocalDate.now(), "pwd", "STUDENT");
 
     when(studentService.getAll()).thenReturn(List.of(student));
 

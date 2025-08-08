@@ -19,7 +19,8 @@ class StudentRepositoryTest {
   void findByEmailShouldReturnStudent () {
     // Given
     var email = "test@example.com";
-    Student student = new Student("Test", email, LocalDate.now());
+    Student student = new Student(
+      "Test", email, LocalDate.now(), "pwd", "STUDENT");
     studentRepository.save(student);
 
     // When

@@ -5,6 +5,12 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 /**
  * Estudiantes del sistema.
  */
@@ -16,47 +22,77 @@ public class Student {
 
   @Id
   @SequenceGenerator(
-          name           = "student_sequence",
-          sequenceName   = "student_sequence",
-          allocationSize = 1
+    name = "student_sequence",
+    sequenceName = "student_sequence",
+    allocationSize = 1
   )
   @GeneratedValue(
-          strategy  = GenerationType.SEQUENCE,
-          generator = "student_sequence"
+    strategy = GenerationType.SEQUENCE,
+    generator = "student_sequence"
   )
 
   // Campos -----------------------------------------------
 
-  private Long      id;
-  private String    name;
-  private String    email;
+  private Long id;
+  private String name;
+  private String email;
   private LocalDate dob;
+  private String rol;
+
+  private boolean accountNonExpired;
+  private boolean accountNonLocked;
+  private boolean credentialsNonExpired;
+  private boolean enabled;
 
   @Transient
-  private Integer   age;
+  private Integer age;
+
+  // Hides field in OpenAPI/Swagger.
+  @Schema(hidden = true)
+  // Allows write but blocks read.
+  @JsonProperty(access = Access.WRITE_ONLY)
+  private String password;
+
+  private static final BCryptPasswordEncoder passwordEncoder =
+    new BCryptPasswordEncoder(10);
 
 
   // Constructores ----------------------------------------
 
-  public Student () {}
-
-  public Student (
-      String name, String email, LocalDate dob
-  ) {
-    this.name  = name;
-    this.email = email;
-    this.dob   = dob;
+  public Student () {
   }
 
   public Student (
-      Long id, String name, String email, LocalDate dob
+    String name, String email, LocalDate dob, String password, String rol
   ) {
-    this.id    = id;
-    this.name  = name;
+    this.name = name;
     this.email = email;
-    this.dob   = dob;
+    this.dob = dob;
+    this.rol = rol;
+    this.accountNonExpired = true;
+    this.accountNonLocked = true;
+    this.credentialsNonExpired = true;
+    this.enabled = true;
+
+    this.password = password != null ? passwordEncoder.encode(password) : null;
   }
 
+  public Student (
+    Long id,
+    String name, String email, LocalDate dob, String password, String rol
+  ) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.dob = dob;
+    this.rol = rol;
+    this.accountNonExpired = true;
+    this.accountNonLocked = true;
+    this.credentialsNonExpired = true;
+    this.enabled = true;
+
+    this.password = password != null ? passwordEncoder.encode(password) : null;
+  }
 
 
   // Getters/Setters --------------------------------------
@@ -101,6 +137,53 @@ public class Student {
     this.age = age;
   }
 
+  public String getPassword () {
+    return password;
+  }
+
+  public void setPassword (String password) {
+    this.password = password != null ? passwordEncoder.encode(password) : null;
+  }
+
+  public String getRol () {
+    return rol;
+  }
+
+  public void setRol (String rol) {
+    this.rol = rol;
+  }
+
+  public boolean isAccountNonExpired () {
+    return accountNonExpired;
+  }
+
+  public void setAccountNonExpired (boolean accountNonExpired) {
+    this.accountNonExpired = accountNonExpired;
+  }
+
+  public boolean isAccountNonLocked () {
+    return accountNonLocked;
+  }
+
+  public void setAccountNonLocked (boolean accountNonLocked) {
+    this.accountNonLocked = accountNonLocked;
+  }
+
+  public boolean isCredentialsNonExpired () {
+    return credentialsNonExpired;
+  }
+
+  public void setCredentialsNonExpired (boolean credentialsNonExpired) {
+    this.credentialsNonExpired = credentialsNonExpired;
+  }
+
+  public boolean isEnabled () {
+    return enabled;
+  }
+
+  public void setEnabled (boolean enabled) {
+    this.enabled = enabled;
+  }
 
 
   // Serializacion ----------------------------------------
@@ -108,11 +191,11 @@ public class Student {
   @Override
   public String toString () {
     return "Student{" +
-        "id=" + id +
-        ", name='" + name + '\'' +
-        ", email='" + email + '\'' +
-        ", dob=" + dob +
-        ", age=" + age +
-        '}';
+      "id=" + id +
+      ", name='" + name + '\'' +
+      ", email='" + email + '\'' +
+      ", dob=" + dob +
+      ", age=" + age +
+      '}';
   }
 }

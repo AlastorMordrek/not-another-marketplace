@@ -15,9 +15,10 @@ public class StudentService {
 
   private final StudentRepository studentRepository;
 
-
   @Autowired
-  public StudentService (StudentRepository studentRepository) {
+  public StudentService (
+    StudentRepository studentRepository
+  ) {
     this.studentRepository = studentRepository;
   }
 
@@ -58,7 +59,7 @@ public class StudentService {
         student.setName(name);
       }
       if (Email.valid_p(email) && !Objects.equals(student.getEmail(), email)
-          && !email_taken_p(email)) {
+        && !email_taken_p(email)) {
         student.setEmail(email);
       }
 
@@ -67,15 +68,18 @@ public class StudentService {
   }
 
 
-
   private Student with (Long studentId, Function<Student, Student> fun) {
     return studentRepository
-        .findById(studentId)
-        .map(fun)
-        .orElseThrow(() -> new IllegalStateException("Student not found."));
+      .findById(studentId)
+      .map(fun)
+      .orElseThrow(() -> new IllegalStateException("Student not found."));
   }
 
   public boolean email_taken_p (String email) {
     return studentRepository.findByEmail(email).isPresent();
+  }
+
+  public String verify (Student student) {
+    return "Success";
   }
 }
