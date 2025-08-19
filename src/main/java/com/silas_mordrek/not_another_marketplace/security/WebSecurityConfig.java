@@ -22,16 +22,16 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfig {
 
   private final UserDetailsService userDetailsService;
-//  private final JwtFilter jwtFilter;
+  private final JwtFilter jwtFilter;
 
 
   @Autowired
   public WebSecurityConfig (
     UserDetailsService userDetailsService
-//    , JwtFilter jwtFilter
+    , JwtFilter jwtFilter
   ) {
     this.userDetailsService = userDetailsService;
-//    this.jwtFilter = jwtFilter;
+    this.jwtFilter = jwtFilter;
   }
 
 
@@ -66,7 +66,7 @@ public class WebSecurityConfig {
       .sessionManagement(sesion ->
         sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-//      .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+      .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
       .userDetailsService(userDetailsService)
 
