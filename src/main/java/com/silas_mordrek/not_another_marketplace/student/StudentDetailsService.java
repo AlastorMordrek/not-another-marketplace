@@ -1,7 +1,6 @@
 package com.silas_mordrek.not_another_marketplace.student;
 
-//import org.springframework.security.core.userdetails.User;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,9 +12,8 @@ public class StudentDetailsService implements UserDetailsService {
 
   private final StudentRepository studentRepository;
 
-  public StudentDetailsService (
-    StudentRepository studentRepository
-  ) {
+  @Autowired
+  public StudentDetailsService (StudentRepository studentRepository) {
     this.studentRepository = studentRepository;
   }
 

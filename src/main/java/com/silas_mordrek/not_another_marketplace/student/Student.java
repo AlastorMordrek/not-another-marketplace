@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -53,9 +51,6 @@ public class Student {
   @JsonProperty(access = Access.WRITE_ONLY)
   private String password;
 
-  private static final BCryptPasswordEncoder passwordEncoder =
-    new BCryptPasswordEncoder(10);
-
 
   // Constructores ----------------------------------------
 
@@ -73,8 +68,7 @@ public class Student {
     this.accountNonLocked = true;
     this.credentialsNonExpired = true;
     this.enabled = true;
-
-    this.password = password != null ? passwordEncoder.encode(password) : null;
+    this.password = password;
   }
 
   public Student (
@@ -90,8 +84,7 @@ public class Student {
     this.accountNonLocked = true;
     this.credentialsNonExpired = true;
     this.enabled = true;
-
-    this.password = password != null ? passwordEncoder.encode(password) : null;
+    this.password = password;
   }
 
 
@@ -142,7 +135,7 @@ public class Student {
   }
 
   public void setPassword (String password) {
-    this.password = password != null ? passwordEncoder.encode(password) : null;
+    this.password = password;
   }
 
   public String getRol () {

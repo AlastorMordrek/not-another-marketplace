@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static java.time.Month.JANUARY;
 
@@ -13,7 +12,10 @@ import static java.time.Month.JANUARY;
 public class StudentConfig {
 
   @Bean
-  CommandLineRunner studentCommandLineRunner (StudentRepository repository) {
+  CommandLineRunner studentCommandLineRunner (
+    StudentRepository repository,
+    StudentService studentService
+  ) {
     return args -> {
 
       Student michael = new Student(
@@ -31,7 +33,8 @@ public class StudentConfig {
         "STUDENT"
       );
 
-      repository.saveAll(List.of(michael, alex));
+      studentService.add(michael);
+      studentService.add(alex);
     };
   }
 }

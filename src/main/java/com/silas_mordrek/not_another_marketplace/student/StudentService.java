@@ -2,7 +2,15 @@ package com.silas_mordrek.not_another_marketplace.student;
 
 import com.silas_mordrek.not_another_marketplace.base_model.Email;
 import com.silas_mordrek.not_another_marketplace.base_model.Nombre;
+import com.silas_mordrek.not_another_marketplace.security.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +22,21 @@ import java.util.function.Function;
 public class StudentService {
 
   private final StudentRepository studentRepository;
+  private final StudentDetailsService studentDetailsService;
+  private final PasswordEncoder passwordEncoder;
+  private final JWTService jwtService;
 
   @Autowired
   public StudentService (
-    StudentRepository studentRepository
+    StudentRepository studentRepository,
+    StudentDetailsService studentDetailsService,
+    PasswordEncoder passwordEncoder,
+    JWTService jwtService
   ) {
     this.studentRepository = studentRepository;
+    this.studentDetailsService = studentDetailsService;
+    this.passwordEncoder = passwordEncoder;
+    this.jwtService = jwtService;
   }
 
 
@@ -38,7 +55,7 @@ public class StudentService {
     if (email_taken_p(student.getEmail())) {
       throw new IllegalStateException("Email already taken.");
     }
-
+    student.setPassword(passwordEncoder.encode(student.getPassword()));
     return studentRepository.save(student);
   }
 
@@ -80,6 +97,29 @@ public class StudentService {
   }
 
   public String verify (Student student) {
-    return "Success";
+    // Get the user details first to check if user exists.
+    UserDetails userDetails = studentDetailsService.loadUserByUsername(
+      student.getEmail());
+
+    // Verify the password matches.
+    if (!passwordEncoder.matches(
+      student.getPassword(), userDetails.getPassword())) {
+      throw new BadCredentialsException("Bad credentials");
+    }
+
+    // Create authenticated token.
+    Authentication authentication = new UsernamePasswordAuthenticationToken(
+      userDetails,
+      null,
+      userDetails.getAuthorities()
+    );
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    if (authentication.isAuthenticated()) {
+      return jwtService.generateToken(userDetails.getUsername());
+    }
+
+    return "Failure";
   }
 }

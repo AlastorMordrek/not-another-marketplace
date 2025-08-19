@@ -1,7 +1,5 @@
-package com.silas_mordrek.not_another_marketplace.config;
+package com.silas_mordrek.not_another_marketplace.security;
 
-import com.silas_mordrek.not_another_marketplace.student.StudentDetailsService;
-import com.silas_mordrek.not_another_marketplace.student.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -22,14 +21,17 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-  private final StudentRepository studentRepository;
+  private final UserDetailsService userDetailsService;
+//  private final JwtFilter jwtFilter;
 
 
   @Autowired
   public WebSecurityConfig (
-    StudentRepository studentRepository
+    UserDetailsService userDetailsService
+//    , JwtFilter jwtFilter
   ) {
-    this.studentRepository = studentRepository;
+    this.userDetailsService = userDetailsService;
+//    this.jwtFilter = jwtFilter;
   }
 
 
@@ -43,6 +45,7 @@ public class WebSecurityConfig {
         req
           .requestMatchers(
             // Authentication endpoints.
+            "/login",
             "/api/v1/student/login",
             "/api/v1/student/logout",
             "/api/v1/student/register",
@@ -56,27 +59,20 @@ public class WebSecurityConfig {
           // All other endpoints.
           .anyRequest().authenticated())
 
-      .formLogin(withDefaults())
+//      .formLogin(withDefaults())
 
       .httpBasic(withDefaults())
 
       .sessionManagement(sesion ->
         sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-      .userDetailsService(userDetailsService())
+//      .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
-//      .authenticationManager(
-//        authenticationManager(new AuthenticationConfiguration()))
+      .userDetailsService(userDetailsService)
 
       .build();
   }
 
-
-  @Bean
-  public UserDetailsService userDetailsService () {
-//    return new StudentDetailsService(studentRepository, passwordEncoder());
-    return new StudentDetailsService(studentRepository);
-  }
 
   @Bean
   public PasswordEncoder passwordEncoder () {
@@ -85,7 +81,8 @@ public class WebSecurityConfig {
 
   @Bean
   public AuthenticationManager authenticationManager (
-    AuthenticationConfiguration config) throws Exception {
+    AuthenticationConfiguration config
+  ) throws Exception {
     return config.getAuthenticationManager();
   }
 
